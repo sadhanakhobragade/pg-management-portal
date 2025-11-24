@@ -1,0 +1,24 @@
+# ignore all node_modules in project
+node_modules/
+
+# environment files
+.env
+.env.*
+backend/.env
+frontend/.env
+
+# build/output folders
+dist/
+build/
+.next/
+frontend/dist/
+backend/dist/
+
+# logs
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# editor / OS
+.vscode/
+.DS_Store
