@@ -2,13 +2,15 @@
 
 import axios from "axios";
 
-// Use Vercel env in production, fallback to localhost for local dev
+// Decide backend URL based on where the frontend is running
 const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000/api" // local dev
+    : "https://pg-management-portal.onrender.com/api"; // deployed backend
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: false, // or true if you ever use cookies
+  withCredentials: false,
 });
 
 export default api;
