@@ -15,28 +15,24 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import api from "@/api/api";
-import axios from "axios";
-
-// Registration endpoint for backend auth
-const API_URL = "http://localhost:5000/api/auth/register";
+import api from "@/api/api"; // shared API instance (points to Render backend)
 
 export default function AddTenantDialog({
   open,
   onOpenChange,
   vacantRooms,
-  selectedRoomId, // NEW
+  selectedRoomId,
 }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    room: "", // Room _id (optional)
+    room: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
 
-  // When dialog opens from Room card, pre-select that room
+  // Pre-select room when dialog opened from a specific room card
   useEffect(() => {
     if (selectedRoomId) {
       setFormData((prev) => ({
@@ -75,12 +71,11 @@ export default function AddTenantDialog({
     };
 
     try {
-      // 1️⃣ Register tenant via /api/auth/register
-      await axios.post(API_URL, registrationData);
+      // 1️⃣ Register tenant via /api/auth/register (NO localhost)
+      await api.post("/auth/register", registrationData);
 
       // 2️⃣ If a room is selected, find tenant id and assign to that room
       if (formData.room) {
-        // fetch tenant list to get the new tenant's id
         const tenantsRes = await api.get("/portal/tenant-list");
         const tenants = tenantsRes.data || [];
 
@@ -92,7 +87,7 @@ export default function AddTenantDialog({
           throw new Error("Tenant registered but not found in tenant list.");
         }
 
-        const tenantId = newTenant.id; // from portalRoutes formatting
+        const tenantId = newTenant.id; // based on portalRoutes formatting
 
         await api.put(`/portal/rooms/${formData.room}/assign`, {
           tenantId,
@@ -213,5 +208,5 @@ AddTenantDialog.propTypes = {
       rent_amount: PropTypes.number.isRequired,
     })
   ).isRequired,
-  selectedRoomId: PropTypes.string, // NEW
+  selectedRoomId: PropTypes.string,
 };
