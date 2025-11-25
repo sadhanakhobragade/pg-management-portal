@@ -2,15 +2,16 @@
 
 import axios from "axios";
 
-// Decide backend URL based on where the frontend is running
-const API_BASE_URL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:5000/api" // local dev
-    : "https://pg-management-portal.onrender.com/api"; // deployed backend
+// Use Render URL in production, localhost in development
+const API_BASE_URL = import.meta.env.PROD
+  ? "https://pg-management-portal.onrender.com/api"
+  : "http://localhost:5000/api";
+
+console.log("API_BASE_URL =>", API_BASE_URL);
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: false,
+  withCredentials: false, // keep as you had
 });
 
 export default api;
