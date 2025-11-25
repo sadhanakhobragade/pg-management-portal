@@ -1,35 +1,14 @@
 // frontend/src/api/api.js
 
-import axios from 'axios';
+import axios from "axios";
 
-// Define the base URL for your Express backend
-const API_BASE_URL = "https://pg-management-portal.onrender.com";
+// Use Vercel env in production, fallback to localhost for local dev
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-
-// Create an Axios instance
 const api = axios.create({
-    baseURL: API_BASE_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
+  baseURL: API_BASE_URL,
+  withCredentials: false, // or true if you ever use cookies
 });
-
-// Request interceptor to attach the JWT token to every request
-api.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            // Set the Authorization header if a token exists
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
-
-// We don't need a response interceptor yet, but it's where you'd handle
-// 401 (Unauthorized) errors globally.
 
 export default api;
