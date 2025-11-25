@@ -3,7 +3,8 @@
 import axios from 'axios';
 
 // Define the base URL for your Express backend
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = "https://pg-management-portal.onrender.com";
+
 
 // Create an Axios instance
 const api = axios.create({
